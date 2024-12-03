@@ -53,18 +53,17 @@ public record Grid : IGrid
     public int NumBands => BoxWidth; // Height of the grid in boxes
     public int NumEmptyCells => NumCells - NumFilledCells;
     public int NumFilledCells => Cells.Cast<int>().Count(cell => cell != EmptyCellValue);
-    
-    public int GetCell(int index) => GetCell(GetCoordinates(index).column, GetCoordinates(index).row);
-    public int GetCell(int column, int row) => Cells[row, column];
+    public int ToIndex(int column, int row) => (row - 1) * NumColumns + column;
+    public int ToColumn(int index) => (index - 1) % NumColumns + 1;
+    public int ToRow(int index) => (index - 1) / NumColumns + 1;
 
+    public int GetCell(int index) => GetCell(ToColumn(index), ToRow(index));
+    public int GetCell(int column, int row) => Cells[row, column];
     public bool IsEmpty(int index) => GetCell(index) == EmptyCellValue;
     public bool IsEmpty(int column, int row) => GetCell(column, row) == EmptyCellValue;
-
     public bool IsFilled(int index) => !IsEmpty(index);
     public bool IsFilled(int column, int row) => !IsEmpty(column, row);
-
-    public IGrid WithCell(int index, int value) => WithCell(GetCoordinates(index).column, GetCoordinates(index).row, value);
-
+    public IGrid WithCell(int index, int value) => WithCell(ToColumn(index), ToRow(index), value);
     public IGrid WithCell(int column, int row, int value)
     {
         if (value < 0 || value > Size)
@@ -74,12 +73,6 @@ public record Grid : IGrid
         newCells[row, column] = value;
         return this with { Cells = newCells };
     }
-
     public IGrid WithEmpty(int index) => WithCell(index, 0);
     public IGrid WithEmpty(int column, int row) => WithCell(column, row, 0);
-
-    private (int column, int row) GetCoordinates(int index) =>
-        index < 0 || index >= Size * Size
-            ? throw new ArgumentOutOfRangeException(nameof(index), "Index must be within grid bounds.")
-            : (index % Size, index / Size);
 }
