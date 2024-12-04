@@ -15,6 +15,8 @@ public class SolverTests
         };
         var grid = new Grid(puzzle);
         
+        
+        
         // Act
         var solver = new Solver();
         var solution = solver.FindSolution(grid);

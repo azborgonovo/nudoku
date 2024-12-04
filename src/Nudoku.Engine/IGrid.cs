@@ -3,7 +3,10 @@ namespace Nudoku.Engine;
 public interface IGrid
 {
     int Size { get; }
+    int BoxWidth { get; }
+    int BoxHeight { get; }
     int[,] Cells { get; }
+    
     
     int GetCell(int index);
     int GetCell(int column, int row);

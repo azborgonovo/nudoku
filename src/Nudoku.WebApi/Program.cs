@@ -1,8 +1,14 @@
+using System.Text.Json;
+using Microsoft.AspNetCore.Mvc;
+using Nudoku.Engine;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+builder.Services.AddSingleton<ISolver, Solver>();
+
+builder.Services.ConfigureHttpJsonOptions(options => options.SerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower);
 
 var app = builder.Build();
 
@@ -14,26 +20,24 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-var summaries = new[]
+app.MapPost("/solve", (GridDto puzzle, [FromServices] ISolver solver) =>
 {
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
+    var puzzleGrid = new Grid(puzzle.Size, puzzle.Cells);
+    
+    var solutionGrid = solver.FindSolution(puzzleGrid);
+    
+    if (solutionGrid is null)
+        return Results.BadRequest("No solution found");
 
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast = Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        )).ToArray();
-    return forecast;
-}).WithName("GetWeatherForecast");
+    var solution = new GridDto(solutionGrid.Size,
+        solutionGrid.BoxWidth,
+        solutionGrid.BoxHeight,
+        solutionGrid.Cells.Cast<int>().ToArray());
 
-app.Run();
+    return TypedResults.Ok(solution);
 
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
+}).WithName("FindFirstSolution");
+
+await app.RunAsync();
+
+record GridDto(int Size, int BoxWidth, int BoxHeight, int[] Cells);

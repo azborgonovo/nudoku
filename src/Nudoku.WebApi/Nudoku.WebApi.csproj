@@ -17,4 +17,8 @@
       </Content>
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Nudoku.Engine\Nudoku.Engine.csproj" />
+    </ItemGroup>
+
 </Project>

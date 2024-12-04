@@ -23,6 +23,27 @@ public record Grid : IGrid
         Cells = new int[Size, Size];
     }
     
+    public Grid(int size, int[] cells)
+    {
+        if (size <= 0 || Math.Sqrt(size) % 1 != 0)
+            throw new ArgumentException("Size must be a perfect square.");
+        
+        if (cells.Length != size * size)
+            throw new ArgumentException("Cells must have the same size as the grid.");
+        
+        Size = size;
+        Cells = new int[Size, Size];
+        BoxWidth = (int)Math.Sqrt(size);
+        BoxHeight = BoxWidth;
+        
+        for (int i = 0; i < cells.Length; i++)
+        {
+            int column = i % Size;
+            int row = i / Size;
+            Cells[row, column] = cells[i];
+        }
+    }
+    
     public Grid(int[,] cells)
     {
         int size = cells.GetLength(0);
