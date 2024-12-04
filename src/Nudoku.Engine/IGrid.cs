@@ -7,7 +7,6 @@ public interface IGrid
     int BoxHeight { get; }
     int[,] Cells { get; }
     
-    
     int GetCell(int index);
     int GetCell(int column, int row);
     bool IsEmpty(int index);
@@ -20,4 +19,11 @@ public interface IGrid
 
     IGrid WithEmpty(int index);
     IGrid WithEmpty(int column, int row);
+    
+    /// <summary>
+    /// If the grid has any duplicate values in any group or if there are cells that have
+    /// no possible allowed values then an incorrect move has been previously made and the
+    /// grid has no solution.
+    /// </summary>
+    bool IsViable();
 }
