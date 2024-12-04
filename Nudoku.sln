@@ -10,6 +10,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nudoku.Engine", "src\Nudoku
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nudoku.Engine.Tests", "test\Nudoku.Engine.Tests\Nudoku.Engine.Tests.csproj", "{7482AEEB-E425-4651-BD3F-D5E1B2BEE3C6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nudoku.Engine.Benchmarks", "test\Nudoku.Engine.Benchmarks\Nudoku.Engine.Benchmarks.csproj", "{4EC5649D-12CB-4435-9DBE-CEF5570ABB83}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -28,10 +30,15 @@ Global
 		{7482AEEB-E425-4651-BD3F-D5E1B2BEE3C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7482AEEB-E425-4651-BD3F-D5E1B2BEE3C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7482AEEB-E425-4651-BD3F-D5E1B2BEE3C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4EC5649D-12CB-4435-9DBE-CEF5570ABB83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4EC5649D-12CB-4435-9DBE-CEF5570ABB83}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4EC5649D-12CB-4435-9DBE-CEF5570ABB83}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4EC5649D-12CB-4435-9DBE-CEF5570ABB83}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{8AC13C13-E944-4100-B01E-DF72F12EA081} = {5604EA95-62A2-4E13-9811-980A6ED681FB}
 		{2B056D9F-7CC3-4F81-B0DA-CCA3EC8643A7} = {5604EA95-62A2-4E13-9811-980A6ED681FB}
 		{7482AEEB-E425-4651-BD3F-D5E1B2BEE3C6} = {B624712F-37A0-47EB-9549-0B6CCC31A75B}
+		{4EC5649D-12CB-4435-9DBE-CEF5570ABB83} = {B624712F-37A0-47EB-9549-0B6CCC31A75B}
 	EndGlobalSection
 EndGlobal
