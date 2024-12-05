@@ -7,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddOpenApi();
-builder.Services.AddSingleton<ISolver, SolverV2>();
+builder.Services.AddSingleton<ISolver, SolverV1>();
 
 builder.Services.ConfigureHttpJsonOptions(options => options.SerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower);
 
@@ -33,7 +33,7 @@ app.MapPost("/solve", (GridDto puzzle, [FromServices] ISolver solver) =>
     var solution = new GridDto(solutionGrid.Size,
         solutionGrid.BoxWidth,
         solutionGrid.BoxHeight,
-        solutionGrid.Cells.Cast<int>().ToArray());
+        solutionGrid.Cells.ToArray());
 
     return TypedResults.Ok(solution);
 

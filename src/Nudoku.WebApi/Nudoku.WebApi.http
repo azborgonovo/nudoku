@@ -1,6 +1,11 @@
-@Nudoku.WebApi_HostAddress = http://localhost:5123
+POST {{Nudoku_WebApi_HostAddress}}/solve
+Content-Type: application/json
 
-GET {{Nudoku.WebApi_HostAddress}}/weatherforecast/
-Accept: application/json
+{
+	"size": 4,
+	"box_width": 2,
+	"box_height": 2,
+	"cells": [ 4, 3, 0, 0, 1, 2, 3, 0, 0, 0, 2, 0, 2, 1, 0, 0 ]
+}
 
 ###
