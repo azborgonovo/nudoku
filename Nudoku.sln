@@ -12,6 +12,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nudoku.Engine.Tests", "test
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nudoku.Engine.Benchmarks", "test\Nudoku.Engine.Benchmarks\Nudoku.Engine.Benchmarks.csproj", "{4EC5649D-12CB-4435-9DBE-CEF5570ABB83}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{9F76E4B3-F1EE-4A8E-93D2-8CF7654CB064}"
+	ProjectSection(SolutionItems) = preProject
+		docs\nudoku-api.json = docs\nudoku-api.json
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

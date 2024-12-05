@@ -5,10 +5,17 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+        <OpenApiDocumentsDirectory>./../../docs/</OpenApiDocumentsDirectory>
+        <OpenApiGenerateDocumentsOptions>--file-name nudoku-api</OpenApiGenerateDocumentsOptions>
     </PropertyGroup>
 
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.0"/>
+        <PackageReference Include="Microsoft.Extensions.ApiDescription.Server" Version="9.0.0">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Scalar.AspNetCore" Version="1.2.47" />
     </ItemGroup>
 
     <ItemGroup>

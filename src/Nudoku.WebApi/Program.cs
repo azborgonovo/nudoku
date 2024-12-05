@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Nudoku.Engine;
 using Nudoku.Engine.Generators;
 using Nudoku.Engine.Solvers;
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,11 +17,8 @@ builder.Services.ConfigureHttpJsonOptions(options => options.SerializerOptions.P
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-}
-
+app.MapOpenApi();
+app.MapScalarApiReference(options => { options.WithTitle("Nudoku API: The Ninjacat of Sudoku"); });
 app.UseHttpsRedirection();
 
 app.MapPost("/solve", (GridDto puzzle, [FromServices] ISolver solver) =>

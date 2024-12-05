@@ -1,0 +1,118 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Nudoku.WebApi | v1",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/solve": {
+      "post": {
+        "tags": [
+          "Nudoku.WebApi"
+        ],
+        "operationId": "FindFirstSolution",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GridDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/generate": {
+      "post": {
+        "tags": [
+          "Nudoku.WebApi"
+        ],
+        "operationId": "GeneratePuzzle",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GeneratePuzzleRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GridDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "GeneratePuzzleRequest": {
+        "required": [
+          "box_width",
+          "box_height"
+        ],
+        "type": "object",
+        "properties": {
+          "box_width": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "box_height": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "GridDto": {
+        "required": [
+          "size",
+          "box_width",
+          "box_height",
+          "cells"
+        ],
+        "type": "object",
+        "properties": {
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "box_width": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "box_height": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "cells": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Nudoku.WebApi"
+    }
+  ]
+}
