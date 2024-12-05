@@ -1,12 +1,13 @@
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Nudoku.Engine;
+using Nudoku.Engine.Solvers;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddOpenApi();
-builder.Services.AddSingleton<ISolver, Solver>();
+builder.Services.AddSingleton<ISolver, SolverV2>();
 
 builder.Services.ConfigureHttpJsonOptions(options => options.SerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower);
 

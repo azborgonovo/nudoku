@@ -1,9 +1,6 @@
-namespace Nudoku.Engine;
+namespace Nudoku.Engine.Solvers;
 
-using System;
-using System.Collections.Generic;
-
-public class Solver : ISolver
+public class SolverV1 : ISolver
 {
     public IGrid? FindSolution(IGrid puzzle)
     {
