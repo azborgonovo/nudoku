@@ -1,12 +1,19 @@
 # Nudoku
 
-A C#/.NET Web API that generates and solves Sudoku puzzles. It provides endpoints to create Sudoku puzzles of varying difficulty levels and solve them programmatically.
+A C#/.NET Web API that generates and solves [Sudoku](https://en.wikipedia.org/wiki/Sudoku) puzzles. It provides endpoints to create Sudoku puzzles of varying difficulty levels and solve them programmatically.
 
 ## Performance optimizations
 
 There are different Sudoku [solvers](https://github.com/azborgonovo/nudoku/tree/main/src/Nudoku.Engine/Solvers) implemented in the application. They are identified by a version number. Our goal is to optimize them for performance and memory allocation. The current benchmarking results are as follows.
 
 ![Benchmark results from 2024-12-05](https://github.com/azborgonovo/nudoku/blob/main/docs/img/Benchmarks_20241205.png?raw=true)
+
+## How to use it?
+
+- A puzzle can be generated calling the endpoint `POST /generate`.
+- The solution can be found by calling the endpoint `POST /solve`.
+
+See the [API documentation](https://github.com/azborgonovo/nudoku/blob/main/docs/nudoku-api.json) for the entire list of endpoints and their respective payloads.
 
 ## Running locally
 
