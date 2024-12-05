@@ -1,11 +1,36 @@
+POST {{Nudoku_WebApi_HostAddress}}/generate
+Content-Type: application/json
+
+{
+  "box_width": 2,
+  "box_height": 2
+}
+
+###
+
 POST {{Nudoku_WebApi_HostAddress}}/solve
 Content-Type: application/json
 
 {
-	"size": 4,
-	"box_width": 2,
-	"box_height": 2,
-	"cells": [ 4, 3, 0, 0, 1, 2, 3, 0, 0, 0, 2, 0, 2, 1, 0, 0 ]
+  "size": 4,
+  "box_width": 2,
+  "box_height": 2,
+  "cells": [
+    0,
+    0,
+    0,
+    0,
+    3,
+    4,
+    1,
+    2,
+    2,
+    1,
+    0,
+    0,
+    0,
+    0,
+    2,
+    1
+  ]
 }
-
-###
