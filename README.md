@@ -12,8 +12,8 @@ There are different Sudoku [solvers](https://github.com/azborgonovo/nudoku/tree/
 
 - Install the [.NET 9 SDK](https://dotnet.microsoft.com/download)
 - Run the following command from the folder where Nudoku is cloned
-```csharp
-dotnet run --project Nudoku.WebApi/Nudoku.WebApi.csproj
+```bash
+dotnet run --project src/Nudoku.WebApi/Nudoku.WebApi.csproj
 ```
 
 ## Acknowledgements
