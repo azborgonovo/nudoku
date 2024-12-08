@@ -12,17 +12,23 @@ public class PuzzleGeneratorV1 : IPuzzleGenerator
 
     public IGrid Generate(int size)
     {
-        var boxWidth = (int)Math.Sqrt(size);
-        var boxHeight = boxWidth;
-        return Generate(boxWidth, boxHeight);
+        var boxSize = (int)Math.Sqrt(size);
+        return Generate(size, boxSize, boxSize);
     }
 
     public IGrid Generate(int boxWidth, int boxHeight)
     {
         var size = boxWidth * boxHeight;
-        
+        return Generate(size, boxWidth, boxHeight);
+    }
+
+    public IGrid Generate(int size, int boxWidth, int boxHeight)
+    {
+        if (size != boxWidth * boxHeight)
+            throw new ArgumentException("Size must match the product of box width and box height.");
+
         var solvedGrid = GenerateSolvedGrid(size);
-        
+
         return CreatePuzzle(solvedGrid, size);
     }
 
