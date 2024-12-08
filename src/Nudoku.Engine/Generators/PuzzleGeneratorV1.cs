@@ -24,17 +24,13 @@ public class PuzzleGeneratorV1 : IPuzzleGenerator
 
     public IGrid Generate(int size, int boxWidth, int boxHeight)
     {
-        if (size != boxWidth * boxHeight)
-            throw new ArgumentException("Size must match the product of box width and box height.");
-
-        var solvedGrid = GenerateSolvedGrid(size);
-
-        return CreatePuzzle(solvedGrid, size);
+        var solvedGrid = GenerateSolvedGrid(size, boxWidth, boxHeight);
+        return CreatePuzzle(solvedGrid);
     }
 
-    private IGrid GenerateSolvedGrid(int size)
+    private IGrid GenerateSolvedGrid(int size, int boxWidth, int boxHeight)
     {
-        var emptyGrid = new Grid(size, new int[size * size]);
+        var emptyGrid = new Grid(boxWidth, boxHeight, new int[size * size]);
         var solvedGrid = _solver.FindSolution(emptyGrid);
 
         if (solvedGrid == null)
@@ -43,7 +39,7 @@ public class PuzzleGeneratorV1 : IPuzzleGenerator
         return solvedGrid;
     }
 
-    private static IGrid CreatePuzzle(IGrid solvedGrid, int size)
+    private static IGrid CreatePuzzle(IGrid solvedGrid)
     {
         var cells = solvedGrid.Cells.ToArray();
         var totalCells = cells.Length;
@@ -59,6 +55,6 @@ public class PuzzleGeneratorV1 : IPuzzleGenerator
             }
         }
 
-        return new Grid(size, cells);
+        return new Grid(solvedGrid.BoxWidth, solvedGrid.BoxHeight, cells);
     }
 }

@@ -2,7 +2,7 @@ POST {{Nudoku_WebApi_HostAddress}}/generate
 Content-Type: application/json
 
 {
-  "box_width": 2,
+  "box_width": 3,
   "box_height": 2
 }
 

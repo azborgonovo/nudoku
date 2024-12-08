@@ -20,7 +20,7 @@ public class SolverBenchmarks
     
     [Benchmark]
     public void Solve6X6PuzzleV1() => _solverV1.FindSolution(PuzzleExample.Puzzle6X6);
-    
+
     [Benchmark]
     public void Solve4X4PuzzleV2() => _solverV2.FindSolution(PuzzleExample.Puzzle4X4);
     

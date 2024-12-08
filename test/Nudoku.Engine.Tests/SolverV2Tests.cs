@@ -16,6 +16,17 @@ public class SolverV2Tests
         Assert.NotNull(solution);
         Assert.Equal(expectedSolution.Cells, solution.Cells);
     }
+    
+    [Fact]
+    public void FindSolution_Should_ReturnNullForUnsolvablePuzzle()
+    {
+        // Act
+        var solver = new SolverV1();
+        var solution = solver.FindSolution(PuzzleExample.UnsolvablePuzzle6X6);
+
+        // Assert
+        Assert.Null(solution);
+    }
 
     public static IEnumerable<object[]> TestCases_For_FindSolution_Should_ReturnExpectedSolution()
     {        
