@@ -2,6 +2,9 @@ namespace Nudoku.Engine;
 
 public class PuzzleExample
 {
+    /// <summary>
+    /// 9 x 9 puzzle, with 3 x 3 boxes
+    /// </summary>
     public static readonly IGrid Puzzle9X9 = new Grid(new[,]
     {
         { 4, 0, 0, 0, 0, 0, 0, 0, 8 },
@@ -30,7 +33,10 @@ public class PuzzleExample
         { 6, 2, 4, 3, 9, 5, 8, 1, 7 }
     });
         
-    public static readonly IGrid Puzzle6X6 = new Grid(new[,]
+    /// <summary>
+    /// 6 x 6 puzzle, with 3 x 2 boxes
+    /// </summary>
+    public static readonly IGrid Puzzle6X6 = new Grid(3, 2, new[,]
     {
         { 0, 0, 0, 1, 4, 0 },
         { 0, 0, 5, 0, 0, 0 },
@@ -40,7 +46,7 @@ public class PuzzleExample
         { 0, 3, 6, 0, 0, 0 }
     });
     
-    public static readonly IGrid Solution6X6 = new Grid(new int[,]
+    public static readonly IGrid Solution6X6 = new Grid(3, 2, new[,]
     {
         { 3, 6, 2, 1, 4, 5 },
         { 2, 4, 5, 6, 1, 3 },
@@ -50,6 +56,9 @@ public class PuzzleExample
         { 4, 3, 6, 2, 5, 1 }
     });
 
+    /// <summary>
+    /// 4 x 4 puzzle, with 2 x 2 boxes
+    /// </summary>
     public static readonly IGrid Puzzle4X4 = new Grid(new [,]
     {
         { 1, 0, 0, 0 },

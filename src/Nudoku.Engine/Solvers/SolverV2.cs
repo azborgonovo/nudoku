@@ -54,7 +54,8 @@ public class SolverV2 : ISolver
             return;
         }
 
-        foreach (var value in GetPossibleValues(puzzle, emptyCell.Value))
+        var possibleValues = puzzle.GetOptions(emptyCell.Value);
+        foreach (var value in possibleValues)
         {
             var newPuzzle = puzzle.WithCell(emptyCell.Value, value);
             SolveAll(newPuzzle, max, solutions);
@@ -63,49 +64,11 @@ public class SolverV2 : ISolver
 
     private static int? FindEmptyCell(IGrid puzzle)
     {
-        for (int i = 0; i < puzzle.Cells.Length; i++)
+        for (var i = 0; i < puzzle.Cells.Length; i++)
         {
             if (puzzle.IsEmpty(i))
                 return i;
         }
         return null;
-    }
-
-    private static IEnumerable<int> GetPossibleValues(IGrid puzzle, int cell)
-    {
-        int size = puzzle.Size;
-        int boxWidth = puzzle.BoxWidth;
-        int boxHeight = puzzle.BoxHeight;
-
-        var row = cell / size;
-        var col = cell % size;
-
-        var usedValues = new HashSet<int>();
-
-        // Add values from the row
-        for (int c = 0; c < size; c++)
-        {
-            usedValues.Add(puzzle.GetCell(c, row));
-        }
-
-        // Add values from the column
-        for (int r = 0; r < size; r++)
-        {
-            usedValues.Add(puzzle.GetCell(col, r));
-        }
-
-        // Add values from the box
-        int boxStartRow = (row / boxHeight) * boxHeight;
-        int boxStartCol = (col / boxWidth) * boxWidth;
-
-        for (int r = 0; r < boxHeight; r++)
-        {
-            for (int c = 0; c < boxWidth; c++)
-            {
-                usedValues.Add(puzzle.GetCell(boxStartCol + c, boxStartRow + r));
-            }
-        }
-
-        return Enumerable.Range(1, size).Where(v => !usedValues.Contains(v));
     }
 }

@@ -16,9 +16,10 @@ public interface IGrid
 
     IGrid WithCell(int index, int value);
     IGrid WithCell(int column, int row, int value);
-
     IGrid WithEmpty(int index);
     IGrid WithEmpty(int column, int row);
+
+    List<int> GetOptions(int index);
     
     int[,] GetMatrix();
 

@@ -1,5 +1,3 @@
-using System.Text;
-
 namespace Nudoku.Engine;
 
 public record Grid : IGrid
@@ -16,26 +14,59 @@ public record Grid : IGrid
         if (cells.Length != size * size)
             throw new ArgumentException("Cells array must match the size of the grid.");
 
+        var boxSize = (int)Math.Sqrt(size);
+        
         Size = size;
-        BoxWidth = (int)Math.Sqrt(size);
-        BoxHeight = (int)Math.Sqrt(size);
+        BoxWidth = boxSize;
+        BoxHeight = boxSize;
         Cells = (int[])cells.Clone();
     }
 
-    public Grid(int[,] cells)
+    public Grid(int boxWidth, int boxHeight, int[] cells)
+    {
+        var size = boxWidth * boxHeight;
+        
+        if (cells.Length != size * size)
+            throw new ArgumentException("Cells array must match the size of the grid.");
+
+        Size = size;
+        BoxWidth = boxWidth;
+        BoxHeight = boxHeight;
+        Cells = (int[])cells.Clone();
+    }
+
+    public Grid(int[,] cells) : this((int)Math.Sqrt(cells.GetLength(0)), (int)Math.Sqrt(cells.GetLength(0)), cells)
+    {
+    }
+    
+    public Grid(int boxWidth, int boxHeight, int[,] cells)
     {
         if (cells.GetLength(0) != cells.GetLength(1))
             throw new ArgumentException("Cells array must be square.");
-
+        
+        if (boxHeight * boxWidth != cells.GetLength(0))
+            throw new ArgumentException("Box size must match the size of the grid.");
+        
         Size = cells.GetLength(0);
-        BoxWidth = (int)Math.Sqrt(Size);
-        BoxHeight = (int)Math.Sqrt(Size);
+        BoxWidth = boxWidth;
+        BoxHeight = boxHeight;
         Cells = cells.Cast<int>().ToArray();
     }
 
     public int GetCell(int index) => Cells[index];
 
-    public int GetCell(int column, int row) => Cells[row * Size + column];
+    public int GetCell(int column, int row) => Cells[GetIndex(column, row)];
+
+    private int GetIndex(int column, int row)
+    {
+        if (column < 0 || column >= Size)
+            throw new ArgumentOutOfRangeException(nameof(column), "Column index out of range.");
+        
+        if (row < 0 || row >= Size)
+            throw new ArgumentOutOfRangeException(nameof(row), "Row index out of range.");
+        
+        return row * Size + column;
+    }
 
     public bool IsEmpty(int index) => GetCell(index) == EmptyCellValue;
 
@@ -49,10 +80,10 @@ public record Grid : IGrid
     {
         var newCells = (int[])Cells.Clone();
         newCells[index] = value;
-        return new Grid(Size, newCells);
+        return new Grid(BoxWidth, BoxHeight, newCells);
     }
 
-    public IGrid WithCell(int column, int row, int value) => WithCell(row * Size + column, value);
+    public IGrid WithCell(int column, int row, int value) => WithCell(GetIndex(column, row), value);
 
     public IGrid WithEmpty(int index) => WithCell(index, EmptyCellValue);
 
@@ -73,16 +104,82 @@ public record Grid : IGrid
 
     public bool IsViable()
     {
-        return !Enumerable.Range(0, Size).Any(i => HasDuplicates(GetRow(i)) || HasDuplicates(GetColumn(i))) &&
-               !Enumerable.Range(0, Size / BoxHeight)
-                          .SelectMany(boxRow => Enumerable
-                              .Range(0, Size / BoxWidth)
-                              .Select(boxCol => GetBox(boxRow * BoxHeight, boxCol * BoxWidth)))
-                          .Any(HasDuplicates);
+        var hasDuplicatesInAnyRowOrColumn = Enumerable.Range(0, Size)
+            .Any(i => HasDuplicates(GetRow(i)) || HasDuplicates(GetColumn(i)));
+        
+        var hasDuplicatesInAnyBox = Enumerable.Range(0, Size / BoxHeight)
+            .SelectMany(boxRow => Enumerable
+                .Range(0, Size / BoxWidth)
+                .Select(boxCol => GetBox(boxRow * BoxHeight, boxCol * BoxWidth)))
+            .Any(HasDuplicates);
+        
+        var hasZombies = HasZombies();
+        
+        return !hasDuplicatesInAnyRowOrColumn && !hasDuplicatesInAnyBox && !hasZombies;
     }
     
     private static bool HasDuplicates(int[] values) => values.Where(v => v != EmptyCellValue).GroupBy(v => v).Any(g => g.Count() > 1);
 
+    private bool HasZombies()
+    {
+        for (int index = 0; index < Cells.Length; index++)
+        {
+            if (!IsEmpty(index))
+                continue;
+
+            var options = GetOptions(index);
+
+            // If there are no possible options, the grid has zombies
+            if (options.Count == 0)
+                return true;
+        }
+
+        // No zombies found
+        return false;
+    }
+
+    public List<int> GetOptions(int index)
+    {
+        int size = Size;
+        int boxWidth = BoxWidth;
+        int boxHeight = BoxHeight;
+
+        var row = index / size;
+        var col = index % size;
+
+        var usedValues = new HashSet<int>();
+
+        // Collect values from the row
+        for (int c = 0; c < size; c++)
+        {
+            usedValues.Add(GetCell(c, row));
+        }
+
+        // Collect values from the column
+        for (int r = 0; r < size; r++)
+        {
+            usedValues.Add(GetCell(col, r));
+        }
+
+        // Collect values from the box
+        int boxStartRow = (row / boxHeight) * boxHeight;
+        int boxStartCol = (col / boxWidth) * boxWidth;
+
+        for (int r = 0; r < boxHeight; r++)
+        {
+            for (int c = 0; c < boxWidth; c++)
+            {
+                int boxCellRow = boxStartRow + r;
+                int boxCellCol = boxStartCol + c;
+                usedValues.Add(GetCell(boxCellCol, boxCellRow));
+            }
+        }
+
+        // Return all values not used in the row, column, or box
+        return Enumerable.Range(1, size).Where(v => !usedValues.Contains(v)).ToList();
+    }
+
+    
     private int[] GetRow(int row) => Cells.Skip(row * Size).Take(Size).ToArray();
 
     private int[] GetColumn(int column) => Enumerable.Range(0, Size).Select(row => Cells[row * Size + column]).ToArray();
@@ -90,9 +187,9 @@ public record Grid : IGrid
     private int[] GetBox(int startRow, int startColumn)
     {
         return Enumerable.Range(0, BoxHeight)
-                         .SelectMany(r => Enumerable
-                             .Range(0, BoxWidth)
-                             .Select(c => Cells[(startRow + r) * Size + startColumn + c]))
-                         .ToArray();
+            .SelectMany(r => Enumerable
+                .Range(0, BoxWidth)
+                .Select(c => Cells[(startRow + r) * Size + startColumn + c]))
+            .ToArray();
     }
 }

@@ -87,7 +87,7 @@ public class SolverV1 : ISolver
     {
         return !UsedInRow(grid, row, num) &&
                !UsedInColumn(grid, col, num) &&
-               !UsedInSubGrid(grid, col, row, num);
+               !UsedInBox(grid, col, row, num);
     }
 
     private static bool UsedInRow(IGrid grid, int row, int num)
@@ -108,15 +108,14 @@ public class SolverV1 : ISolver
         return false;
     }
 
-    private static bool UsedInSubGrid(IGrid grid, int col, int row, int num)
+    private static bool UsedInBox(IGrid grid, int col, int row, int num)
     {
-        int subGridSize = (int)Math.Sqrt(grid.Size);
-        int startRow = row / subGridSize * subGridSize;
-        int startCol = col / subGridSize * subGridSize;
+        int startRow = row / grid.BoxHeight * grid.BoxHeight;
+        int startCol = col / grid.BoxWidth * grid.BoxWidth;
 
-        for (int r = 0; r < subGridSize; r++)
+        for (int r = 0; r < grid.BoxHeight; r++)
         {
-            for (int c = 0; c < subGridSize; c++)
+            for (int c = 0; c < grid.BoxWidth; c++)
             {
                 if (grid.GetCell(startCol + c, startRow + r) == num)
                     return true;
