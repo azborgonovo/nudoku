@@ -4,19 +4,13 @@ public class SolverV2 : ISolver
 {
     public IGrid? FindSolution(IGrid puzzle)
     {
-        if (!puzzle.IsViable())
-            return null;
-
         var solutions = new List<IGrid>();
         SolveAll(puzzle, 1, solutions);
         return solutions.FirstOrDefault();
     }
 
     public IEnumerable<IGrid> FindSolutions(IGrid puzzle, int max)
-    {
-        if (!puzzle.IsViable())
-            return [];
-        
+    {   
         var solutions = new List<IGrid>();
         SolveAll(puzzle, max, solutions);
         return solutions;
@@ -24,9 +18,6 @@ public class SolverV2 : ISolver
 
     public int CountSolutions(IGrid puzzle, int max)
     {
-        if (!puzzle.IsViable())
-            return 0;
-
         var solutions = new List<IGrid>();
         SolveAll(puzzle, max, solutions);
         return solutions.Count;
@@ -53,7 +44,7 @@ public class SolverV2 : ISolver
 
     private static void SolveAll(IGrid puzzle, int max, List<IGrid> solutions)
     {
-        if (solutions.Count >= max || !puzzle.IsViable())
+        if (solutions.Count >= max)
             return;
 
         var emptyCell = FindEmptyCell(puzzle);

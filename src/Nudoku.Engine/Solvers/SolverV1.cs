@@ -4,8 +4,9 @@ public class SolverV1 : ISolver
 {
     public IGrid? FindSolution(IGrid puzzle)
     {
-        var solution = Solve(puzzle);
-        return solution;
+        var solutions = new List<IGrid>();
+        SolveAll(puzzle, solutions, 1);
+        return solutions.FirstOrDefault();
     }
     
     public IEnumerable<IGrid> FindSolutions(IGrid puzzle, int max)
@@ -46,33 +47,9 @@ public class SolverV1 : ISolver
         return true;
     }
 
-    // Solves the puzzle and returns a single solution, or null if none exists
-    private static IGrid? Solve(IGrid grid)
-    {
-        for (int row = 0; row < grid.Size; row++)
-        {
-            for (int col = 0; col < grid.Size; col++)
-            {
-                if (grid.IsEmpty(col, row))
-                {
-                    for (int num = 1; num <= grid.Size; num++)
-                    {
-                        if (IsSafe(grid, col, row, num))
-                        {
-                            var newGrid = grid.WithCell(col, row, num);
-                            var result = Solve(newGrid);
-                            if (result != null)
-                                return result;
-                        }
-                    }
-                    return null; // Backtrack
-                }
-            }
-        }
-        return grid; // Solved
-    }
-
-    // Finds all solutions recursively and adds them to the solutions list
+    /// <summary>
+    /// Finds all solutions recursively and adds them to the solutions list
+    /// </summary>
     private static void SolveAll(IGrid grid, List<IGrid> solutions, int max, bool stopAfterCount = false)
     {
         if (solutions.Count >= max)
@@ -103,7 +80,9 @@ public class SolverV1 : ISolver
         solutions.Add(grid);
     }
 
-    // Checks if a number can be safely placed at a specific cell
+    /// <summary>
+    /// Checks if a number can be safely placed at a specific cell
+    /// </summary>
     private static bool IsSafe(IGrid grid, int col, int row, int num)
     {
         return !UsedInRow(grid, row, num) &&
