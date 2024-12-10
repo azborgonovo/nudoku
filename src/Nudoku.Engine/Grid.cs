@@ -9,48 +9,54 @@ public record Grid : IGrid
     public int BoxHeight { get; }
     public int[] Cells { get; }
 
-    public Grid(int size, int[] cells)
+    public Grid(int size, int boxWidth, int boxHeight, int[] cells)
+    {
+        if (boxWidth * boxHeight != size)
+            throw new ArgumentException("Box size must match the size of the grid.");
+
+        if (cells.Length != size * size)
+            throw new ArgumentException("Cells array must match the size of the grid.");
+
+        Size = size;
+        BoxWidth = boxWidth;
+        BoxHeight = boxHeight;
+        Cells = (int[])cells.Clone();
+    }
+
+    public static Grid Create(int size, int[] cells)
     {
         if (cells.Length != size * size)
             throw new ArgumentException("Cells array must match the size of the grid.");
 
         var boxSize = (int)Math.Sqrt(size);
         
-        Size = size;
-        BoxWidth = boxSize;
-        BoxHeight = boxSize;
-        Cells = (int[])cells.Clone();
+        return new Grid(size, boxSize, boxSize, cells);
     }
-
-    public Grid(int boxWidth, int boxHeight, int[] cells)
+    
+    public static Grid Create(int boxWidth, int boxHeight, int[] cells)
     {
         var size = boxWidth * boxHeight;
         
-        if (cells.Length != size * size)
-            throw new ArgumentException("Cells array must match the size of the grid.");
-
-        Size = size;
-        BoxWidth = boxWidth;
-        BoxHeight = boxHeight;
-        Cells = (int[])cells.Clone();
-    }
-
-    public Grid(int[,] cells) : this((int)Math.Sqrt(cells.GetLength(0)), (int)Math.Sqrt(cells.GetLength(0)), cells)
-    {
+        return new Grid(size, boxWidth, boxHeight, cells);
     }
     
-    public Grid(int boxWidth, int boxHeight, int[,] cells)
+    public static Grid Create(int[,] cells)
     {
-        if (cells.GetLength(0) != cells.GetLength(1))
-            throw new ArgumentException("Cells array must be square.");
+        var dimension0Length = cells.GetLength(0);
+
+        if (dimension0Length != cells.GetLength(1))
+            throw new ArgumentException("Cells array must be square.", nameof(cells));
         
-        if (boxHeight * boxWidth != cells.GetLength(0))
-            throw new ArgumentException("Box size must match the size of the grid.");
+        var boxSize = (int)Math.Sqrt(dimension0Length);
         
-        Size = cells.GetLength(0);
-        BoxWidth = boxWidth;
-        BoxHeight = boxHeight;
-        Cells = cells.Cast<int>().ToArray();
+        return Create(boxSize, boxSize, cells);
+    }
+    
+    public static Grid Create(int boxWidth, int boxHeight, int[,] cells)
+    {
+        var size = boxWidth * boxHeight;
+        
+        return new Grid(size, boxWidth, boxHeight, cells.Cast<int>().ToArray());
     }
 
     public int GetCell(int index) => Cells[index];
@@ -80,7 +86,7 @@ public record Grid : IGrid
     {
         var newCells = (int[])Cells.Clone();
         newCells[index] = value;
-        return new Grid(BoxWidth, BoxHeight, newCells);
+        return new Grid(Size, BoxWidth, BoxHeight, newCells);
     }
 
     public IGrid WithCell(int column, int row, int value) => WithCell(GetIndex(column, row), value);
