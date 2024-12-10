@@ -30,7 +30,7 @@ public class PuzzleGeneratorV1 : IPuzzleGenerator
 
     private IGrid GenerateSolvedGrid(int size, int boxWidth, int boxHeight)
     {
-        var emptyGrid = new Grid(boxWidth, boxHeight, new int[size * size]);
+        var emptyGrid = new Grid(size, boxWidth, boxHeight, new int[size * size]);
         var solvedGrid = _solver.FindSolution(emptyGrid);
 
         if (solvedGrid == null)
@@ -55,6 +55,6 @@ public class PuzzleGeneratorV1 : IPuzzleGenerator
             }
         }
 
-        return new Grid(solvedGrid.BoxWidth, solvedGrid.BoxHeight, cells);
+        return new Grid(solvedGrid.Size, solvedGrid.BoxWidth, solvedGrid.BoxHeight, cells);
     }
 }

@@ -23,7 +23,7 @@ app.UseHttpsRedirection();
 
 app.MapPost("/solve", (GridDto puzzle, [FromServices] ISolver solver) =>
 {
-    var puzzleGrid = new Grid(puzzle.Size, puzzle.Cells);
+    var puzzleGrid = new Grid(puzzle.Size, puzzle.BoxWidth, puzzle.BoxHeight, puzzle.Cells);
     
     var solutionGrid = solver.FindSolution(puzzleGrid);
     
