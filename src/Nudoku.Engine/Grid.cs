@@ -1,14 +1,16 @@
+using System.Collections.Immutable;
+
 namespace Nudoku.Engine;
 
 public record Grid : IGrid
 {
     public const int EmptyCellValue = 0;
 
-    public int Size { get; }
-    public int BoxWidth { get; }
-    public int BoxHeight { get; }
-    public int[] Cells { get; }
-
+    public int Size { get; init; }
+    public int BoxWidth { get; init; }
+    public int BoxHeight { get; init; }
+    public ImmutableArray<int> Cells { get; init; }
+    
     public Grid(int size, int boxWidth, int boxHeight, int[] cells)
     {
         if (boxWidth * boxHeight != size)
@@ -20,7 +22,7 @@ public record Grid : IGrid
         Size = size;
         BoxWidth = boxWidth;
         BoxHeight = boxHeight;
-        Cells = (int[])cells.Clone();
+        Cells = [..cells];
     }
 
     public static Grid Create(int size, int[] cells)
@@ -84,9 +86,8 @@ public record Grid : IGrid
 
     public IGrid WithCell(int index, int value)
     {
-        var newCells = (int[])Cells.Clone();
-        newCells[index] = value;
-        return new Grid(Size, BoxWidth, BoxHeight, newCells);
+        var newCells = Cells.SetItem(index, value);
+        return this with { Cells = newCells };
     }
 
     public IGrid WithCell(int column, int row, int value) => WithCell(GetIndex(column, row), value);

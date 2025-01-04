@@ -14,7 +14,7 @@ public class SolverV1Tests
 
         // Assert
         Assert.NotNull(solution);
-        Assert.Equal(expectedSolution.Cells, solution.Cells);
+        Assert.Equal(expectedSolution.Cells.ToArray(), solution.Cells.ToArray());
     }
     
     [Fact]
