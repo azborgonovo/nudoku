@@ -6,7 +6,7 @@ A C#/.NET Web API that generates and solves [Sudoku](https://en.wikipedia.org/wi
 
 There are different Sudoku [solvers](https://github.com/azborgonovo/nudoku/tree/main/src/Nudoku.Engine/Solvers) implemented in the application. They are identified by a version number. Our goal is to optimize them for performance and memory allocation. The current benchmarking results are as follows.
 
-![Benchmark results from 2024-12-05](https://github.com/azborgonovo/nudoku/blob/main/docs/img/Benchmarks_20241205.png?raw=true)
+![Benchmark results from 2025-01-04](https://github.com/azborgonovo/nudoku/blob/main/docs/img/Benchmarks_20250104_ImmutableArray.png?raw=true)
 
 ## How to use it?
 
